@@ -17,26 +17,26 @@
         }
         .line-numbers {
             position: absolute;
-            top: 35px; /* Align with the start of the code in the textarea */
+            top: 35px; 
             left: 0;
-            width: 35px; /* Adjust width to account for padding */
-            height: calc(100% - 40px); /* Align with the textarea height */
+            width: 35px; 
+            height: calc(100% - 40px); 
             border-right: 1px solid #ccc;
             text-align: right;
             padding-right: 5px;
-            padding-left: 10px; /* Add left padding */
+            padding-left: 10px; 
             color: #888;
             overflow: hidden;
             font-family: monospace;
             line-height: 1.5em;
         }
         .line-numbers div {
-            height: 2.em; /* Adjust this line height to match the textarea line height */
+            height: 2.em; 
         }
         textarea {
-            padding-left: 50px; /* Adjust this padding to make room for the line numbers */
+            padding-left: 50px; 
             font-family: monospace;
-            line-height: 1.5em; /* Ensure the line height matches the line numbers */
+            line-height: 1.5em; 
             resize: none;
         }
     </style>
