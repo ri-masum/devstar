@@ -65,7 +65,7 @@
   }
 
   function saveXML() {
-    localStorage.setItem("savedXML", formattedXML);
+    localStorage.setItem("savedXML", rawXML);
     alert("XML has been saved!");
   }
 
