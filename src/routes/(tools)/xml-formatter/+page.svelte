@@ -9,7 +9,7 @@
   let outputLineNumbers;
   let inputXML;
   let outputXML;
-
+  let fileInput;
   onMount(() => {
     const savedXML = localStorage.getItem("savedXML");
 
@@ -64,6 +64,22 @@
     URL.revokeObjectURL(url);
   }
 
+  function loadFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      rawXML = e.target.result;
+      formatXML();
+    };
+    reader.readAsText(file);
+  }
+
+  function triggerFileInput() {
+    fileInput.click();
+  }
+
   function saveXML() {
     localStorage.setItem("savedXML", rawXML);
     alert("XML has been saved!");
@@ -112,7 +128,7 @@
         >
           <button
             class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            on:click={formatXML}>Load</button
+            on:click={triggerFileInput}>Load</button
           >
           <button
             class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -155,6 +171,13 @@
           class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           on:click={clearXML}>Clear</button
         >
+        <input
+          type="file"
+          accept=".xml"
+          bind:this={fileInput}
+          on:change={loadFile}
+          class="hidden"
+        />
       </div>
     </div>
   </div>
