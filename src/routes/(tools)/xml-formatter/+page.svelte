@@ -14,68 +14,168 @@
             position: relative;
             display: flex;
             width: 100%;
+            height: 100%;
         }
         .line-numbers {
             position: absolute;
-            top: 35px; 
+            top: 56px; 
             left: 0;
-            width: 35px; 
-            height: calc(100% - 40px); 
+            width: 50px; 
+            height: calc(100% - 22%); 
             border-right: 1px solid #ccc;
             text-align: right;
-            padding-right: 5px;
-            padding-left: 10px; 
+            padding-right: 10px;
+            padding-left: 5px; 
             color: #888;
             overflow: hidden;
             font-family: monospace;
             line-height: 1.5em;
+            overflow-y: auto;
         }
         .line-numbers div {
-            height: 2.em; 
+            height: 1.5em; 
+            
         }
         textarea {
-            padding-left: 50px; 
+            width: 100%;
+            height: 100%;
+            padding-left: 60px; 
             font-family: monospace;
             line-height: 1.5em; 
             resize: none;
+            overflow-y: auto;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+        .copy-button svg {
+            width: 24px;
+            height: 24px;
+            fill: #888;
+        }
+        .copy-button:hover svg {
+            fill: #555;
         }
     </style>
 </head>
 <body class="bg-gray-400 h-screen w-full">
-	<h1 class="text-2xl font-bold text-center bg-gradient-to-r from-purple-400 to-red-500 text-transparent bg-clip-text">
-		XML Formatter
-	  </h1>
-	  
+    <h1 class="text-2xl font-bold text-center bg-gradient-to-r from-purple-400 to-red-500 text-transparent bg-clip-text">
+        XML Formatter
+    </h1>
+    <div class="flex items-center justify-center h-full">
+        <div class="flex flex-col items-start w-full max-w-full p-4 bg-gray-200 rounded-lg shadow-lg">
+            <div class="flex flex-col md:flex-row w-full space-y-4 md:space-y-0 md:space-x-4">
+                <!-- First Textarea Container -->
+                <div class="flex flex-col items-start w-full md:w-1/2 bg-gray-100 rounded-lg p-4 textarea-container">
+                    <button class="copy-button" onclick="copyXML('inputXML');" title="Copy Input">
+                       <img src="https://cdn-icons-png.flaticon.com/128/54/54702.png" alt="" class="w-5">
+                    </button>
+                    <div class="line-numbers font-bold" id="inputLineNumbers"></div>
+                    <label for="inputXML" class="mb-2 text-sm font-medium text-gray-700">Input XML</label>
+                    <textarea id="inputXML" class="w-full h-64 p-3 border px-10 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your XML here..." onscroll="syncScroll(this, 'inputLineNumbers')"></textarea>
+                </div>
 
-<div class="flex items-center justify-center h-full">
-  <div class="flex flex-col items-start w-full max-w-full p-4 bg-gray-200 rounded-lg shadow-lg">
-    <div class="flex flex-col md:flex-row w-full space-y-4 md:space-y-0 md:space-x-4">
-      <!-- First Textarea Container -->
-      <div class="flex flex-col items-start w-full md:w-1/2 bg-[#9bc400] rounded-lg p-4">
-        <label for="inputXML" class="mb-2 text-sm font-medium text-gray-700">Input XML</label>
-        <textarea id="inputXML" class="w-full h-64 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your XML here..."></textarea>
-      </div>
+                <!-- Buttons between the Textareas -->
+                <div class="flex flex-row md:flex-col justify-center space-x-2 md:space-x-0 md:space-y-2">
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" onclick="loadXML();">Load</button>
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" onclick="formatXML();">Format</button>
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" onclick="downloadXML();">Download</button>
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" onclick="clearXML();">Clear</button>
+                    <!-- <button class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" onclick="copyXML('inputXML');">Copy Input</button>
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" onclick="copyXML('outputXML');">Copy Output</button> -->
+                </div>
 
-      <!-- Buttons between the Textareas -->
-      <div class="flex flex-row md:flex-col justify-center space-x-2 md:space-x-0 md:space-y-2">
-        <button class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" onclick="transformXML();">Format</button>
-      </div>
-
-      <!-- Second Textarea Container -->
-      <div class="flex flex-col items-start w-full md:w-1/2 bg-[#9bc400] rounded-lg p-4">
-        <label for="outputXML" class="mb-2 text-sm font-medium text-gray-700">Output XML</label>
-        <textarea id="outputXML" class="w-full h-64 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Output will be shown here..."></textarea>
-      </div>
+                <!-- Second Textarea Container -->
+                <div class="flex flex-col items-start w-full md:w-1/2 bg-gray-100 rounded-lg p-4 textarea-container">
+                    <button class="copy-button" onclick="copyXML('outputXML');" title="Copy Output">
+                        <img src="https://cdn-icons-png.flaticon.com/128/54/54702.png" alt="" class="w-5">
+                    </button>
+                    <div class="line-numbers font-bold" id="outputLineNumbers"></div>
+                    <label for="outputXML" class="mb-2 text-sm font-medium text-gray-700">Output XML</label>
+                    <textarea id="outputXML" class="w-full h-64 p-3 border px-10 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Output will be shown here..." onscroll="syncScroll(this, 'outputLineNumbers')"></textarea>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+        function updateLineNumbers(textarea, lineNumbers) {
+            const lines = textarea.value.split('\n').length;
+            let numbersHtml = '';
+            for (let i = 1; i <= lines; i++) {
+                numbersHtml += '<div>' + i + '</div>';
+            }
+            lineNumbers.innerHTML = numbersHtml;
+        }
 
-    <!-- Bottom Buttons -->
-    <div class="flex flex-col md:flex-row items-center justify-end w-full mt-4 space-y-2 md:space-y-0 md:space-x-2">
-      <button class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" onclick="downloadXML();">Download</button>
-      <button class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" onclick="saveXML();">Save</button>
-      <button class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" onclick="clearXML();">Clear</button>
-    </div>
-  </div>
-</div>
+        function syncScroll(textarea, lineNumbersId) {
+            const lineNumbers = document.getElementById(lineNumbersId);
+            lineNumbers.scrollTop = textarea.scrollTop;
+        }
 
+        const inputXML = document.getElementById('inputXML');
+        const inputLineNumbers = document.getElementById('inputLineNumbers');
+        inputXML.addEventListener('input', () => updateLineNumbers(inputXML, inputLineNumbers));
+
+        const outputXML = document.getElementById('outputXML');
+        const outputLineNumbers = document.getElementById('outputLineNumbers');
+        outputXML.addEventListener('input', () => updateLineNumbers(outputXML, outputLineNumbers));
+
+        // Initialize line numbers on page load
+        window.addEventListener('load', () => {
+            updateLineNumbers(inputXML, inputLineNumbers);
+            updateLineNumbers(outputXML, outputLineNumbers);
+        });
+
+        
+        function formatXml(xml) {
+            let formatted = '';
+            let reg = /(>)(<)(\/*)/g;
+            xml = xml.replace(reg, '$1\r\n$2$3');
+            let pad = 0;
+            xml.split('\r\n').forEach(function(node) {
+                let indent = 0;
+                if (node.match(/.+<\/\w[^>]*>$/)) {
+                    indent = 0;
+                } else if (node.match(/^<\/\w/) && pad !== 0) {
+                    pad -= 1;
+                } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+                    indent = 1;
+                } else {
+                    indent = 0;
+                }
+
+                let padding = '';
+                for (let i = 0; i < pad; i++) {
+                    padding += '  ';
+                }
+
+                formatted += padding + node + '\r\n';
+                pad += indent;
+            });
+
+            return formatted;
+        }
+
+        function formatXML() {
+            const inputXMLValue = document.getElementById('inputXML').value;
+            const formattedXML = formatXml(inputXMLValue);
+            document.getElementById('outputXML').value = formattedXML;
+            updateLineNumbers(document.getElementById('outputXML'), document.getElementById('outputLineNumbers'));
+        }
+        //Function to copy XML content
+        function copyXML(textareaId) {
+            const textarea = document.getElementById(textareaId);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); 
+            document.execCommand('copy');
+            alert('Copied to clipboard');
+        }
+    </script>
 </body>
 </html>
