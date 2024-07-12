@@ -309,29 +309,29 @@
         ]
     },
     "xml-formatter": {
-        "name": "",
+        "name": "XML Formatter",
         "link": "/xml-formatter",
-        "description": "",
+        "description": "A web-based tool for formatting XML code, created with Svelte and enhanced with Tailwind CSS.",
         "contributors": [
             {
-                "name": "",
-                "githubId": ""
+                "name": "Enamur Rabbi Ferdausi",
+                "githubId": "EnamurFerdausi"
             },
             {
-                "name": "",
-                "githubId": ""
+                "name": "Masum Ahmed",
+                "githubId": "ri-masum"
             },
             {
-                "name": "",
-                "githubId": ""
+                "name": "Akash Gaikwad",
+                "githubId": "sky-gaikwad"
             },
             {
-                "name": "",
-                "githubId": ""
+                "name": "Nikhil Sarve",
+                "githubId": "nikhilsarve"
             },
             {
-                "name": "",
-                "githubId": ""
+                "name": "Atharva Thakur",
+                "githubId": "plantindesk"
             }
         ]
     }
